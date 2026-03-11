@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Verification Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="gov-header">
+        <div class="header-content">
+            <div class="logo-section">
+                <img src="/iit-logo.png" alt="IIT Roorkee Logo" class="iit-logo">
+            </div>
+        </div>
+        <div class="header-strip"></div>
+    </header>
+
+    <nav class="gov-nav">
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="#about">About Portal</a></li>
+            <li><a href="#verify">Verify Product</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+        </ul>
+    </nav>
+
+    <main class="main-content">
+        <div class="section-card">
+            <h1>Product Authenticity Verification Portal</h1>
+            <p class="byline">An initiative by IPR Chair, IIT Roorkee</p>
+        </div>
+
+        <section class="verification-card">
+            <div class="card-header">
+                <h3>Product Authenticity Verification</h3>
+            </div>
+
+            <div id="loading" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Verifying Information...</p>
+            </div>
+
+            <div id="error-message" class="error-message" style="display: none;"></div>
+
+            <div id="product-details" class="product-details" style="display: none;">
+                <div class="status-banner success">
+                    <span>✓ Product Verified Successfully</span>
+                </div>
+
+                <table class="details-table">
+                    <tbody>
+                        <tr>
+                            <th>Product Name</th>
+                            <td class="stacked-cell">
+                                <img id="product-icon" src="/product_image.png" alt="Product Icon" class="image-above">
+                                <span id="val-product-name">-</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Manufacturer Name</th>
+                            <td id="val-manufacturer">-</td>
+                        </tr>
+                        <tr>
+                            <th>GI Status</th>
+                            <td id="val-status">-</td>
+                        </tr>
+                        <tr>
+                            <th>Serial Number</th>
+                            <td id="val-serial">-</td>
+                        </tr>
+                        <tr>
+                            <th>Batch Number</th>
+                            <td id="val-batch">-</td>
+                        </tr>
+                        <tr>
+                            <th>Manufacturing Date</th>
+                            <td id="val-mfg-date">-</td>
+                        </tr>
+                        <tr>
+                            <th>Expiry Date</th>
+                            <td id="val-expiry-date">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="gi-details-container">
+                    <details>
+                        <summary class="gi-details-summary">GI Details</summary>
+                        <div class="gi-details-content">
+                            <table class="details-table">
+                                <tbody>
+                                    <tr>
+                                        <th>Geographical Indication (GI)</th>
+                                        <td class="stacked-cell">
+                                            <img id="gi-icon" src="/gi_image.jpeg" alt="GI Icon" class="image-above">
+                                            <span id="val-gi"
+                                                style="color: var(--primary-color); font-weight: 700;">-</span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Applicant Name</th>
+                                        <td id="val-applicant">-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Applicant Address</th>
+                                        <td id="val-address">-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Filing</th>
+                                        <td id="val-date-filing">-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Class</th>
+                                        <td id="val-class">-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Goods</th>
+                                        <td id="val-goods">-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Geographical Area</th>
+                                        <td id="val-geo-area">-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Certificate Number</th>
+                                        <td id="val-cert-num">-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Certificate Date</th>
+                                        <td id="val-cert-date">-</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Registration Valid Upto</th>
+                                        <td id="val-valid-upto">-</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </details>
+                </div>
+                <div class="disclaimer">
+                    <p><strong>Note:</strong> This information is retrieved from the official database. If you suspect
+                        counterfeit, please report immediately.</p>
+                </div>
+            </div>
+
+            <div id="input-section" class="input-section">
+                <p>Enter the Application Number manually if you cannot scan the QR code.</p>
+                <div class="search-box">
+                    <input type="text" id="reg-id" placeholder="Enter Application Number">
+                    <button onclick="verifyProduct()">Verify</button>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="gov-footer">
+        <p>Developed and Maintained by IIT Roorkee.</p>
+        <p>An initiative by IPR Chair, IIT Roorkee.</p>
+    </footer>
+
+    <script>
+        // Check URL for ID parameter (e.g. ?id=123)
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+            if (id) {
+                document.getElementById('reg-id').value = id;
+                verifyProduct(id);
+            }
+        });
+
+        async function verifyProduct(idParam = null) {
+            const id = idParam || document.getElementById('reg-id').value.trim();
+            if (!id) {
+                showError("Please enter an Application Number.");
+                return;
+            }
+
+            // UI updates
+            document.getElementById('product-details').style.display = 'none';
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('loading').style.display = 'block';
+
+            try {
+                // Assuming backend runs on the same host or you set appropriate CORS
+                const response = await fetch(`/api/verify?id=${encodeURIComponent(id)}`);
+                const data = await response.json();
+
+                document.getElementById('loading').style.display = 'none';
+
+                if (response.ok) {
+                    // Populate data
+                    document.getElementById('val-product-name').innerText = data.product_name || 'N/A';
+                    document.getElementById('val-manufacturer').innerText = data.manufacturer_name || 'N/A';
+                    document.getElementById('val-gi').innerText = data.gi_name || 'N/A';
+
+                    const orgElem = document.getElementById('val-status');
+                    orgElem.innerText = data.status || 'N/A';
+                    if (data.status && data.status.toLowerCase() === 'registered') {
+                        orgElem.className = 'status-original';
+                    } else {
+                        orgElem.className = '';
+                    }
+
+                    document.getElementById('val-serial').innerText = data.serial_number || 'N/A';
+                    document.getElementById('val-batch').innerText = data.batch_number || 'N/A';
+                    document.getElementById('val-mfg-date').innerText = data.mfg_date || 'N/A';
+                    document.getElementById('val-expiry-date').innerText = data.expiry_date || 'N/A';
+
+                    // GI Details (Collapsed)
+                    document.getElementById('val-applicant').innerText = data.applicant_name || 'N/A';
+                    document.getElementById('val-address').innerText = data.applicant_address || 'N/A';
+                    document.getElementById('val-date-filing').innerText = data.date_of_filing || 'N/A';
+                    document.getElementById('val-class').innerText = data.class_num || 'N/A';
+                    document.getElementById('val-goods').innerText = data.goods || 'N/A';
+                    document.getElementById('val-geo-area').innerText = data.geographical_area || 'N/A';
+                    document.getElementById('val-cert-num').innerText = data.certificate_number || 'N/A';
+                    document.getElementById('val-cert-date').innerText = data.certificate_date || 'N/A';
+                    document.getElementById('val-valid-upto').innerText = data.valid_upto || 'N/A';
+
+                    document.getElementById('product-details').style.display = 'block';
+                } else {
+                    showError(data.error || "Product not found in database.");
+                }
+            } catch (err) {
+                document.getElementById('loading').style.display = 'none';
+                showError("Error connecting to the verification server.");
+            }
+        }
+
+        function showError(msg) {
+            const errElem = document.getElementById('error-message');
+            errElem.innerText = msg;
+            errElem.style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>

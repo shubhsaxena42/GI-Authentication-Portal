@@ -1,0 +1,27 @@
+# Environments
+venv/
+.venv/
+env/
+.env/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask/Runtime
+.pytest_cache/
+.coverage
+htmlcov/
+thulma.xlsx
+# Local/Temp Data
+qrcodes/
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Vercel
+.vercel/
