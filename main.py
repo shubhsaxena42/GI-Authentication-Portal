@@ -81,7 +81,7 @@ if __name__ == '__main__':
 
     # Step 2: Set URL for QR Generation
     # Use Production URL so QR codes work after deployment
-    production_url = "https://gi-authentication-portal-git-main-shubhsaxena42s-projects.vercel.app"
+    production_url = "https://gi-authentication-portal.vercel.app"
     print(f"\n[NET] Production URL for QR: {production_url}")
 
     # Step 3: Generate/refresh QR codes
