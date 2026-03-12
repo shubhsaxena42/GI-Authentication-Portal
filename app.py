@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # Constants
 DB_FILE = 'database.xlsx'
-PRODUCTION_URL = 'https://gi-authentication-portal.vercel.app'
+PRODUCTION_URL = 'https://gi-authentication-portal-git-main-shubhsaxena42s-projects.vercel.app'
 
 def load_db():
     try:

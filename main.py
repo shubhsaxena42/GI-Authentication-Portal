@@ -79,21 +79,20 @@ if __name__ == '__main__':
     # Step 1: Check dependencies
     ensure_dependencies()
 
-    # Step 2: Get current IP
-    local_ip = get_local_ip()
-    base_url = f"http://{local_ip}:5000"
-    print(f"\n[NET] Detected Local IP: {local_ip}")
-    print(f"[NET] Base URL for QR: {base_url}")
+    # Step 2: Set URL for QR Generation
+    # Use Production URL so QR codes work after deployment
+    production_url = "https://gi-authentication-portal-git-main-shubhsaxena42s-projects.vercel.app"
+    print(f"\n[NET] Production URL for QR: {production_url}")
 
     # Step 3: Generate/refresh QR codes
     print("\n[QR] Refreshing QR codes...")
-    generate_qr_codes(base_url)
+    generate_qr_codes(production_url)
 
     # Step 4: Start Flask server
     print(f"\n[SERVER] Starting Flask server...")
-    print(f"  ➜ Local:   http://127.0.0.1:5000")
-    print(f"  ➜ Network: {base_url}")
-    print(f"  ➜ Test:    {base_url}/?id=654")
+    print(f"  ➜ Local:      http://127.0.0.1:5000")
+    print(f"  ➜ Production: {production_url}")
+    print(f"  ➜ Test Live:  {production_url}/?id=654")
     print("\n  Scan the QR from 'qrcodes/' folder using your phone.")
     print("  Press Ctrl+C to stop the server.\n")
     print("=" * 60)
