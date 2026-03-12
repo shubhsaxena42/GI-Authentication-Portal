@@ -171,15 +171,21 @@
             const id = urlParams.get('id');
             if (id) {
                 document.getElementById('reg-id').value = id;
-                verifyProduct(id);
+                verifyProduct(id, true); // true indicates initial load
             }
         });
 
-        async function verifyProduct(idParam = null) {
+        async function verifyProduct(idParam = null, isInitialLoad = false) {
             const id = idParam || document.getElementById('reg-id').value.trim();
             if (!id) {
                 showError("Please enter an Application Number.");
                 return;
+            }
+
+            // Update URL search params without reloading the page
+            if (!isInitialLoad) {
+                const newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?id=' + encodeURIComponent(id);
+                window.history.pushState({ path: newurl }, '', newurl);
             }
 
             // UI updates
@@ -225,6 +231,9 @@
                     document.getElementById('val-valid-upto').innerText = data.valid_upto || 'N/A';
 
                     document.getElementById('product-details').style.display = 'block';
+
+                    // Auto-scroll to the card so user sees results instantly
+                    document.getElementById('verify-section').scrollIntoView({ behavior: 'smooth' });
                 } else {
                     showError(data.error || "Product not found in database.");
                 }
