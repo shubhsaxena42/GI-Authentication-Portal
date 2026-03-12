@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 # Constants
 DB_FILE = 'database.xlsx'
+PRODUCTION_URL = 'https://gi-authentication-portal.vercel.app'
 
 def load_db():
     try:
@@ -96,8 +97,8 @@ def register_product():
     reg_id = str(data['Application Number'])
     
     # Generate QR Code in MEMORY (Base64)
-    base_url = request.host_url.rstrip('/')
-    verification_url = f"{base_url}/?id={reg_id}"
+    # Use Production URL for QR codes so they work after deployment
+    verification_url = f"{PRODUCTION_URL}/?id={reg_id}"
     
     qr = qrcode.QRCode(version=1, box_size=10, border=4)
     qr.add_data(verification_url)
